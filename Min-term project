@@ -1,0 +1,107 @@
+def read():
+    global lines
+    global r
+    r=open('report.txt',encoding='utf-8')
+    lines=r.readlines()
+    r.close()
+read()
+def first_line():
+    global line1
+    global add_line1
+    line1=[]
+    line1.append(lines[0])
+    add_line1=line1[0].split()
+    add_line1.append('总分')
+    add_line1.append('平均分')
+    #print(add_line1)
+    return add_line1
+
+def full_scores():
+    global sum
+    global avr_scores
+    global add_average
+    # global every_stu
+    global new_scores
+    students = lines[1:] #每个学生的成绩列表组成的列表
+    #print(students)
+    new_scores=[]
+    for t1 in students:
+        sum = 0
+        every_stu = t1.split()
+        #print(every_stu)
+        for i in every_stu[1:]:
+            sum += int(i)
+            avr_scores = sum / 9
+            add_average='%.1f'%(avr_scores)
+        every_stu.append(str(sum))
+        every_stu.append(add_average) #每个学生成绩列表，包括总成绩和平均成绩
+        #print(sum)
+        #print(avr_scores)
+        #print(every_stu)
+        new_scores.append(every_stu)
+    print(new_scores)  # 每个学生成绩列表组成的列表，包括总成绩和平均成绩
+full_scores()
+
+#计算每一科的总成绩和平均分
+course=['0','平均']
+def total_course(n):
+    sum_course = 0
+    for j in range(len(new_scores)):
+        # print(j)
+        sum_course = sum_course + int(new_scores[j][n])
+    # print(sum_course)
+    return sum_course
+#计算每一科的平均分
+for i in range(1, int(len(new_scores[0]))-2):
+    p = total_course(i)
+    #print(p)
+    average_course = p // len(new_scores)
+    course.append(str(average_course))
+tot_course=0
+for j in course[2:]:
+    tot_course+=int(j)
+aver_course=tot_course//(int(len(new_scores[0]))-2)
+course.append(str(tot_course))
+course.append(str(aver_course))
+#print(tot_course)
+#print(ever_course)
+    #return average_course
+    #print(average_course)
+print(course) #所有科目的平均分列表
+
+#按平均分排序，添加名次
+def sort_scores():
+    global s
+    s=sorted(new_scores, key=lambda keys: keys[-1],reverse=True)
+    print(s) #排序后每位同学的成绩
+    for add_num in range(len(s)):
+        s[add_num].insert(0,str(add_num+1))
+    print(s)
+sort_scores()
+
+#替换不及格成绩
+def replace():
+    for p in range(len(s)):
+        for q in range(2,len(s[0])-3):
+            if int(s[p][q])<60:
+                s[p][q]=s[p][q].replace(s[p][q],'不及格')
+    print(s)
+replace()
+
+first_line()
+def final_list():
+    s.insert(0,course)
+    s.insert(0,add_line1)
+    print(s)
+    return s
+final_list()
+#写入新文件
+def final_scores():
+    global pri_elem
+    for elem in s:
+        pri_elem=' '.join(elem)
+        print(pri_elem)
+        f=open('result.txt','a',encoding='utf-8')
+        f.write(pri_elem+'\n')
+    return pri_elem
+final_scores()
