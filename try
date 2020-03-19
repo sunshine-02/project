@@ -1,0 +1,5 @@
+print('hello world')
+def get_after(n):
+    return(n+1,n+2)
+after=get_after(10)
+print(after[1])
